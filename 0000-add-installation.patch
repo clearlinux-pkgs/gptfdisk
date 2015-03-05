@@ -1,0 +1,27 @@
+--- gptfdisk-0.8.10/Makefile.orig	2015-03-05 09:11:59.942422198 -0800
++++ gptfdisk-0.8.10/Makefile	2015-03-05 09:12:45.564709324 -0800
+@@ -10,6 +10,7 @@
+ MBR_LIB_OBJS=$(MBR_LIBS:=.o)
+ LIB_HEADERS=$(LIB_NAMES:=.h)
+ DEPEND= makedepend $(CXXFLAGS)
++DESTDIR=/
+ 
+ all:	cgdisk gdisk sgdisk fixparts
+ 
+@@ -42,3 +43,16 @@
+ 	$(CRITICAL_CXX_FLAGS) 
+ 
+ # DO NOT DELETE
++install:
++	mkdir -p $(DESTDIR)/usr/sbin
++	install -m 0755 gdisk $(DESTDIR)/usr/sbin/gdisk
++	install -m 0755 sgdisk $(DESTDIR)/usr/sbin/sgdisk
++	install -m 0755 cgdisk $(DESTDIR)/usr/sbin/cgdisk
++	install -m 0755 fixparts $(DESTDIR)/usr/sbin/fixparts
++	mkdir -p $(DESTDIR)/usr/share/man/man8
++	install -m 0644 gdisk.8 $(DESTDIR)/usr/share/man/man8/gdisk.8
++	install -m 0644 sgdisk.8 $(DESTDIR)/usr/share/man/man8/sgdisk.8
++	install -m 0644 cgdisk.8 $(DESTDIR)/usr/share/man/man8/cgdisk.8
++	install -m 0644 fixparts.8 $(DESTDIR)/usr/share/man/man8/fixparts.8
++
++	

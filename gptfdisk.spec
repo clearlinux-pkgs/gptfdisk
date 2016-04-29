@@ -4,7 +4,7 @@
 #
 Name     : gptfdisk
 Version  : 1.0.1
-Release  : 11
+Release  : 12
 URL      : http://downloads.sourceforge.net/gptfdisk/gptfdisk-1.0.1.tar.gz
 Source0  : http://downloads.sourceforge.net/gptfdisk/gptfdisk-1.0.1.tar.gz
 Summary  : GPT partitioning and MBR repair software

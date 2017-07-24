@@ -1,0 +1,41 @@
+This patch allows the cgdisk utility to continue when a small display is
+detected after flashing a warning about display issues.
+
+This fixes an issue in the Clear Linux installer on older machines with
+lower-resolution diplays (Lenovo ThinkPad S230u) where cgdisk reported the
+screen was too small to continue and the user was unable to manually
+partition their drive without switching TTYs.
+
+On the mentioned machine this patch fixes the issue, and there are no
+breaking issues in the cgdisk utility.
+---
+diff -Naur gptfdisk-1.0.1.orig/gptcurses.cc gptfdisk-1.0.1/gptcurses.cc
+--- gptfdisk-1.0.1.orig/gptcurses.cc	2017-07-24 10:57:45.935780068 -0700
++++ gptfdisk-1.0.1/gptcurses.cc	2017-07-24 10:37:40.496722588 -0700
+@@ -752,17 +752,15 @@
+ } // DrawMenu
+ 
+ int GPTDataCurses::MainMenu(void) {
+-   if (((LINES - RESERVED_TOP - RESERVED_BOTTOM) < 2) || (COLS < 80)) {
+-      Report("Display is too small; it must be at least 80 x 14 characters!");
+-   } else {
+-      if (GPTData::Verify() > 0)
+-         Report("Warning! Problems found on disk! Use the Verify function to learn more.\n"
+-                "Using gdisk or some other program may be necessary to repair the problems.");
+-      IdentifySpaces();
+-      currentSpaceNum = 0;
+-      DrawMenu();
+-      AcceptInput();
+-   } // if/else
++   if (((LINES - RESERVED_TOP - RESERVED_BOTTOM) < 2) || (COLS < 80))
++      Report("Display is less than 80 x 14 characters, this may cause display issues.");
++   if (GPTData::Verify() > 0)
++      Report("Warning! Problems found on disk! Use the Verify function to learn more.\n"
++             "Using gdisk or some other program may be necessary to repair the problems.");
++   IdentifySpaces();
++   currentSpaceNum = 0;
++   DrawMenu();
++   AcceptInput();
+    endwin();
+    return 0;
+ } // GPTDataCurses::MainMenu

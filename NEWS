@@ -1,8 +1,56 @@
+1.0.4 (7/5/2018):
+-----------------
+
+- Added some explicit copy constructors and made some other tweaks to avoid
+  compiler warnings.
+
+- The macOS binary for sgdisk is now a pure 64-bit build; I'm no longer
+  supporting 32-bit builds of sgdisk. The gdisk and cgdisk binaries remain
+  "fat" 32-/64-bit builds. The reason for dropping the 32-bit support from
+  sgdisk is that I've re-built my macOS development system, and I had
+  trouble building a "fat" binary with the fresh install of the popt
+  libraries upon which sgdisk relies. 32-bit support for the other binaries
+  is now officially deprecated, too.
+
+- Added search feature to partition type list functions ("L" on main menu of
+  gdisk and "L" when entered in response to the "Hex code or GUID" prompt in
+  gdisk and sgdisk). This feature filters the partition type list to those
+  which include the search term in their GPT fdisk descriptions. For
+  instance, typing "Linux" shows only partitions with "Linux" in their
+  descriptions. Note that the search/filter is case-sensitive. If <Enter> is
+  pressed, no filter is applied.
+
+- Change to Makefile.mac to use standard libncurses rather than a 3rd-party
+  version; should help with cgdisk compatibility.
+
+- Minor bug fix in alignment of internal data structures.
+
+- Minor bug fix in handling of damaged disks.
+
+- Added type code for Apple APFS (7C3457EF-0000-11AA-AA11-00306543ECAC,
+  0xaf0a).
+
+- Added type code for Atari TOS basic data (0xa200,
+  734E5AFE-F61A-11E6-BC64-92361F002671).
+
+- Added type codes for Linux dm-crypt (0x8308,
+  7FFEC5C9-2D00-49B7-8941-3EA10A5586B7) and LUKS (0x8309,
+  CA7D7CCB-63ED-4C53-861C-1742536059CC) partitions.
+
+- Added 18 Ceph partition type codes.
+
+- Added 52 (yes, 52!) Android partition type codes.
+
+- Changed "Creating new GPT entries" message to read "Creating new
+  GPT entries in memory" because the latter is clearer, particularly when
+  using sgdisk with a non-destructive option, like "-p".
+
 1.0.3 (7/27/2017):
 ------------------
 
 - Fixed a major bug that caused invalid partition tables to be generated
-  under some conditions.
+  when creating a new partition table (that is, partitioning a blank disk or
+  converting from MBR).
 
 1.0.2 (7/26/2017):
 ------------------

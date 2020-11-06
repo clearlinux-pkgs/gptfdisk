@@ -4,15 +4,15 @@
 #
 Name     : gptfdisk
 Version  : 1.0.4
-Release  : 21
+Release  : 22
 URL      : https://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.4/gptfdisk-1.0.4.tar.gz
 Source0  : https://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.4/gptfdisk-1.0.4.tar.gz
 Summary  : GPT partitioning and MBR repair software
 Group    : Development/Tools
 License  : GPL-2.0
-Requires: gptfdisk-bin
-Requires: gptfdisk-license
-Requires: gptfdisk-man
+Requires: gptfdisk-bin = %{version}-%{release}
+Requires: gptfdisk-license = %{version}-%{release}
+Requires: gptfdisk-man = %{version}-%{release}
 BuildRequires : pkgconfig(ncursesw)
 BuildRequires : pkgconfig(uuid)
 BuildRequires : popt-dev
@@ -29,8 +29,7 @@ software.
 %package bin
 Summary: bin components for the gptfdisk package.
 Group: Binaries
-Requires: gptfdisk-license
-Requires: gptfdisk-man
+Requires: gptfdisk-license = %{version}-%{release}
 
 %description bin
 bin components for the gptfdisk package.
@@ -54,6 +53,7 @@ man components for the gptfdisk package.
 
 %prep
 %setup -q -n gptfdisk-1.0.4
+cd %{_builddir}/gptfdisk-1.0.4
 %patch1 -p1
 %patch2 -p1
 
@@ -61,22 +61,28 @@ man components for the gptfdisk package.
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1530990712
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604621512
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
 make  %{?_smp_mflags}
 
+
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 ./gdisk_test.sh
 
 %install
-export SOURCE_DATE_EPOCH=1530990712
+export SOURCE_DATE_EPOCH=1604621512
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/gptfdisk
-cp COPYING %{buildroot}/usr/share/doc/gptfdisk/COPYING
+mkdir -p %{buildroot}/usr/share/package-licenses/gptfdisk
+cp %{_builddir}/gptfdisk-1.0.4/COPYING %{buildroot}/usr/share/package-licenses/gptfdisk/68c94ffc34f8ad2d7bfae3f5a6b996409211c1b1
 %make_install
 
 %files
@@ -90,11 +96,11 @@ cp COPYING %{buildroot}/usr/share/doc/gptfdisk/COPYING
 /usr/bin/sgdisk
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/gptfdisk/COPYING
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/gptfdisk/68c94ffc34f8ad2d7bfae3f5a6b996409211c1b1
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man8/cgdisk.8
 /usr/share/man/man8/fixparts.8
 /usr/share/man/man8/gdisk.8

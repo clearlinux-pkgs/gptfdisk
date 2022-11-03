@@ -1,15 +1,14 @@
 --- gptfdisk-0.8.10/Makefile.orig	2015-03-05 09:11:59.942422198 -0800
 +++ gptfdisk-0.8.10/Makefile	2015-03-05 09:12:45.564709324 -0800
-@@ -10,6 +10,7 @@
- MBR_LIB_OBJS=$(MBR_LIBS:=.o)
+@@ -141,6 +141,7 @@ MBR_LIB_OBJS=$(MBR_LIBS:=.o)
  LIB_HEADERS=$(LIB_NAMES:=.h)
  DEPEND= makedepend $(CXXFLAGS)
+ ALL_EXE=$(ALL:=$(FN_EXTENSION))
 +DESTDIR=/
  
- all:	cgdisk gdisk sgdisk fixparts
+ all:	$(ALL)
  
-@@ -42,3 +43,16 @@
- 	$(CRITICAL_CXX_FLAGS) 
+@@ -42,2 +43,15 @@
  
  # DO NOT DELETE
 +install:

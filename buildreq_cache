@@ -1,4 +1,4 @@
-1.0.4
-pkgconfig(uuid)
+1.0.9
 pkgconfig(ncursesw)
 popt-dev
+util-linux-dev

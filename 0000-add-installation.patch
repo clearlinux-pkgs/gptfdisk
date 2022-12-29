@@ -1,5 +1,16 @@
---- gptfdisk-0.8.10/Makefile.orig	2015-03-05 09:11:59.942422198 -0800
-+++ gptfdisk-0.8.10/Makefile	2015-03-05 09:12:45.564709324 -0800
+From a8161b640321ce4159864390b114c2b1362a3990 Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Thu, 29 Dec 2022 14:21:25 -0800
+Subject: [PATCH] Add installation patch
+
+---
+ Makefile | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index af9701c..c7dd213 100644
+--- a/Makefile
++++ b/Makefile
 @@ -141,6 +141,7 @@ MBR_LIB_OBJS=$(MBR_LIBS:=.o)
  LIB_HEADERS=$(LIB_NAMES:=.h)
  DEPEND= makedepend $(CXXFLAGS)
@@ -8,8 +19,9 @@
  
  all:	$(ALL)
  
-@@ -42,2 +43,15 @@
+@@ -177,3 +178,14 @@ $(OBJS):
  
+ # makedepend dependencies below -- type "makedepend *.cc" to regenerate....
  # DO NOT DELETE
 +install:
 +	mkdir -p $(DESTDIR)/usr/sbin
@@ -22,5 +34,6 @@
 +	install -m 0644 sgdisk.8 $(DESTDIR)/usr/share/man/man8/sgdisk.8
 +	install -m 0644 cgdisk.8 $(DESTDIR)/usr/share/man/man8/cgdisk.8
 +	install -m 0644 fixparts.8 $(DESTDIR)/usr/share/man/man8/fixparts.8
-+
-+	
+-- 
+2.38.1
+

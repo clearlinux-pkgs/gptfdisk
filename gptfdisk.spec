@@ -4,7 +4,7 @@
 #
 Name     : gptfdisk
 Version  : 1.0.9
-Release  : 23
+Release  : 24
 URL      : https://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.9/gptfdisk-1.0.9.tar.gz
 Source0  : https://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.9/gptfdisk-1.0.9.tar.gz
 Summary  : GPT partitioning and MBR repair software
@@ -16,9 +16,14 @@ Requires: gptfdisk-man = %{version}-%{release}
 BuildRequires : pkgconfig(ncursesw)
 BuildRequires : popt-dev
 BuildRequires : util-linux-dev
+# Suppress stripping binaries
+%define __strip /bin/true
+%define debug_package %{nil}
 Patch1: 0000-add-installation.patch
 Patch2: 0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch
-Patch3: bypass-resolution-check.patch
+Patch3: 0002-bypass-resolution-check.patch
+Patch4: backport-popt-1.19.patch
+Patch5: backport-popt-1.19-follow-up.patch
 
 %description
 Partitioning software for GPT disks and to repair MBR disks. The gdisk,
@@ -58,18 +63,20 @@ cd %{_builddir}/gptfdisk-1.0.9
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1667515481
+export SOURCE_DATE_EPOCH=1672352772
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
-export FCFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
-export FFLAGS="$FFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
-export CXXFLAGS="$CXXFLAGS -fno-lto -fstack-protector-strong -fzero-call-used-regs=used "
+export CFLAGS="$CFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
+export FCFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
+export FFLAGS="$FFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
+export CXXFLAGS="$CXXFLAGS -fdebug-types-section -femit-struct-debug-baseonly -fno-lto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
 make  %{?_smp_mflags}
 
 
@@ -81,10 +88,10 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 ./gdisk_test.sh
 
 %install
-export SOURCE_DATE_EPOCH=1667515481
+export SOURCE_DATE_EPOCH=1672352772
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/gptfdisk
-cp %{_builddir}/gptfdisk-%{version}/COPYING %{buildroot}/usr/share/package-licenses/gptfdisk/68c94ffc34f8ad2d7bfae3f5a6b996409211c1b1
+cp %{_builddir}/gptfdisk-%{version}/COPYING %{buildroot}/usr/share/package-licenses/gptfdisk/68c94ffc34f8ad2d7bfae3f5a6b996409211c1b1 || :
 %make_install
 
 %files

@@ -1,3 +1,8 @@
+From 8dae99db0c2804415205f4d935db1ca09712e136 Mon Sep 17 00:00:00 2001
+From: William Douglas <william.douglas@intel.com>
+Date: Thu, 29 Dec 2022 14:23:21 -0800
+Subject: [PATCH] Fix display too small issue for cgdisk
+
 This patch allows the cgdisk utility to continue when a small display is
 detected after flashing a warning about display issues.
 
@@ -9,10 +14,14 @@ partition their drive without switching TTYs.
 On the mentioned machine this patch fixes the issue, and there are no
 breaking issues in the cgdisk utility.
 ---
-diff -Naur gptfdisk-1.0.1.orig/gptcurses.cc gptfdisk-1.0.1/gptcurses.cc
---- gptfdisk-1.0.1.orig/gptcurses.cc	2017-07-24 10:57:45.935780068 -0700
-+++ gptfdisk-1.0.1/gptcurses.cc	2017-07-24 10:37:40.496722588 -0700
-@@ -752,17 +752,15 @@
+ gptcurses.cc | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
+
+diff --git a/gptcurses.cc b/gptcurses.cc
+index 80817e9..1fe001d 100644
+--- a/gptcurses.cc
++++ b/gptcurses.cc
+@@ -762,17 +762,15 @@ void GPTDataCurses::DrawMenu(void) {
  } // DrawMenu
  
  int GPTDataCurses::MainMenu(void) {
@@ -39,3 +48,6 @@ diff -Naur gptfdisk-1.0.1.orig/gptcurses.cc gptfdisk-1.0.1/gptcurses.cc
     endwin();
     return 0;
  } // GPTDataCurses::MainMenu
+-- 
+2.38.1
+
